@@ -60,3 +60,21 @@ exports.updatedBattery = async (req, res) => {
   }
 }
 
+exports.deleteBattery = async (req, res) => {
+  const { serialNumber } = req.params
+
+  try {
+    const deletedBattery = await Battery.findOneAndDelete({
+      batterySerial: serialNumber,
+    })
+
+    if (!deletedBattery) {
+      return res.status(404).json({ error: 'Data not found' })
+    }
+
+    res.status(200).json({ message: 'Data deleted successfully' })
+  } catch (error) {
+    console.error('Error deleting data:', error)
+    res.status(500).json({ error: 'An error occurred while deleting data' })
+  }
+}
